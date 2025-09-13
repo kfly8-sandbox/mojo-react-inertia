@@ -71,10 +71,10 @@ post '/todos' => sub ($c) {
 
   push @todos, $new_todo;
 
-  $c->render(json => $new_todo, status => 201);
+  $c->redirect_to('/todos');
 };
 
-put '/todos/:id' => sub ($c) {
+post '/todos/:id' => sub ($c) {
   my $id = $c->param('id');
   my $json = $c->req->json;
 
@@ -96,7 +96,7 @@ put '/todos/:id' => sub ($c) {
   $todo->{title} = $json->{title} if defined $json->{title};
   $todo->{completed} = $json->{completed} if defined $json->{completed};
 
-  $c->render(json => $todo);
+  $c->redirect_to('/todos');
 };
 
 app->start;
