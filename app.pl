@@ -3,6 +3,15 @@ use lib 'lib';
 
 plugin 'Inertia';
 
+# Serve only assets from dist directory
+push @{app->static->paths}, app->home->child('dist', 'assets');
+
+# Route for /assets/* to serve static files
+get '/assets/*file' => sub ($c) {
+    my $file = $c->param('file');
+    return $c->reply->static($file);
+};
+
 # Sample todo data (in production, use a database)
 my @todos = (
   { id => 1, title => 'Learn Mojolicious', completed => 1 },
