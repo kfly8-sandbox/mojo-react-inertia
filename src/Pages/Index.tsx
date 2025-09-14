@@ -23,6 +23,13 @@ export default function Index() {
           >
             Todo List
           </Link>
+
+          <Link
+            href="/dashboard"
+            className="block p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors"
+          >
+            Dashboard
+          </Link>
         </nav>
       </div>
     </div>

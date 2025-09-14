@@ -11,7 +11,6 @@ get '/assets/*file' => sub ($c) {
     my $file = $c->param('file');
     return $c->reply->static($file);
 };
-
 # Sample todo data (in production, use a database)
 my @todos = (
   { id => 1, title => 'Learn Mojolicious', completed => 1 },
@@ -97,6 +96,41 @@ post '/todos/:id' => sub ($c) {
   $todo->{completed} = $json->{completed} ? 1 : 0;
 
   $c->redirect_to('/todos');
+};
+
+# Dashboard with partial reload support
+get '/dashboard' => sub ($c) {
+  # Get partial data request info
+
+  # Load stats only if requested or if no partial data specified
+  my $stats = sub {
+    return {
+      total_todos => scalar(@todos),
+      completed_todos => scalar(grep { $_->{completed} == 1 } @todos),
+      pending_todos => scalar(grep { $_->{completed} == 0 } @todos),
+    };
+  };
+
+  # Load metrics only if requested or if no partial data specified
+  my $metrics = sub {
+    my $current_time = time();
+    return {
+      last_updated => scalar(localtime($current_time)),
+      random_metric => int(rand(100)),
+      server_load => sprintf("%.2f", rand(4)),
+    };
+  };
+
+  # Load recent todos only if requested or if no partial data specified
+  my $recent_todos = sub {
+    return [ grep { defined } (reverse @todos)[0..2] ];
+  };
+
+  $c->inertia('Dashboard', {
+    stats => $stats,
+    metrics => $metrics,
+    recent_todos => $recent_todos,
+  });
 };
 
 app->start;
