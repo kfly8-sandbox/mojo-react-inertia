@@ -1,4 +1,4 @@
-import { Head, Link, Form, useForm } from '@inertiajs/react'
+import { Head, Link, Form, router } from '@inertiajs/react'
 
 type Todo = {
   id: number
@@ -45,15 +45,10 @@ export default function Todos({ todos }: Props) {
 }
 
 function TodoItem({ todo }: { todo: Todo }) {
-  const { data, setData, transform, post } = useForm({
-    completed: todo.completed
-  })
-
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked ? 1 : 0
-    setData('completed', newValue)
-    transform(data => ({ ...data, completed: newValue }))
-    post(`/todos/${todo.id}`)
+    router.post(`/todos/${todo.id}`, {
+      completed: e.target.checked ? 1 : 0
+    })
   }
 
   return (
@@ -61,10 +56,10 @@ function TodoItem({ todo }: { todo: Todo }) {
       <div>
         <input
           type="checkbox"
-          defaultChecked={data.completed === 1}
+          defaultChecked={todo.completed === 1}
           onChange={handleCheckboxChange}
         />
-        <span style={{ textDecoration: data.completed === 1 ? 'line-through' : 'none' }}>
+        <span style={{ textDecoration: todo.completed === 1 ? 'line-through' : 'none' }}>
           {todo.title}
         </span>
       </div>
