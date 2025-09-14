@@ -44,7 +44,7 @@ export default function TodoDetail({ todo }: Props) {
             <input
               type="checkbox"
               name="completed"
-              defaultChecked={!!todo.completed}
+              defaultChecked={todo.completed === 1}
             />
             Completed
           </label>

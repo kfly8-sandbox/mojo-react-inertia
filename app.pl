@@ -94,7 +94,7 @@ post '/todos/:id' => sub ($c) {
   }
 
   $todo->{title} = $json->{title} if defined $json->{title};
-  $todo->{completed} = $json->{completed} if defined $json->{completed};
+  $todo->{completed} = $json->{completed} ? 1 : 0;
 
   $c->redirect_to('/todos');
 };
