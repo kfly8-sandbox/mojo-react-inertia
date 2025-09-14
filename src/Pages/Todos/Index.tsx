@@ -45,13 +45,14 @@ export default function Todos({ todos }: Props) {
 }
 
 function TodoItem({ todo }: { todo: Todo }) {
-  const { data, setData, post } = useForm({
+  const { data, setData, transform, post } = useForm({
     completed: todo.completed
   })
 
-  const handleCheckboxChange = () => {
-    const newValue = data.completed === 1 ? 0 : 1
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked ? 1 : 0
     setData('completed', newValue)
+    transform(data => ({ ...data, completed: newValue }))
     post(`/todos/${todo.id}`)
   }
 
@@ -60,7 +61,7 @@ function TodoItem({ todo }: { todo: Todo }) {
       <div>
         <input
           type="checkbox"
-          checked={data.completed === 1}
+          defaultChecked={data.completed === 1}
           onChange={handleCheckboxChange}
         />
         <span style={{ textDecoration: data.completed === 1 ? 'line-through' : 'none' }}>
