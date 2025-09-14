@@ -2,13 +2,14 @@ package Mojolicious::Plugin::Inertia;
 use Mojo::Base 'Mojolicious::Plugin', -signatures;
 use Mojo::JSON qw(encode_json);
 use Scalar::Util qw(reftype);
+use Carp qw(croak);
 
 sub register ($self, $app, $conf) {
-    my $version = $conf->{version}
-                or die "Inertia plugin requires a 'version' configuration option";
+    croak "Inertia plugin requires a 'version' configuration option" unless $conf->{version};
+    croak "Inertia plugin requires a 'layout' configuration option" unless $conf->{layout};
 
-    my $layout = $conf->{layout}
-                or die "Inertia plugin requires a 'layout' configuration option";
+    my $version = $conf->{version};
+    my $layout  = ref $conf->{layout} ? $conf->{layout}->slurp : $conf->{layout};
 
     $app->helper(inertia => sub ($c, $component, $props = {}) {
         my $is_inertia        = $c->req->headers->header('X-Inertia');
