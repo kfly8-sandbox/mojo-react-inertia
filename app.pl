@@ -1,7 +1,10 @@
 use Mojolicious::Lite -signatures;
+use Mojo::Util qw(md5_sum);
 use lib 'lib';
 
-plugin 'Inertia';
+plugin 'Inertia', {
+    version => md5_sum( app->home->child('dist', '.vite', 'manifest.json')->slurp ),
+};
 
 # Serve only assets from dist directory
 push @{app->static->paths}, app->home->child('dist', 'assets');
