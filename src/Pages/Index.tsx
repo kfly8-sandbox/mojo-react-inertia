@@ -2,25 +2,29 @@ import { Head, Link } from '@inertiajs/react'
 
 export default function Index() {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
       <Head title="Home" />
-      <h1>Mojolicious + React + Inertia.js</h1>
-      <p>Welcome to your Inertia.js application!</p>
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Mojolicious + React + Inertia.js
+        </h1>
 
-      <h2>Available Pages:</h2>
-      <ul>
-        <li>
-          <Link href="/hello">Hello Page</Link>
-        </li>
-        <li>
-          <Link href="/todos">Todos Page</Link>
-        </li>
-      </ul>
+        <nav className="space-y-2">
+          <Link
+            href="/hello"
+            className="block p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors"
+          >
+            Hello Page
+          </Link>
 
-      <p>
-        Click on the links above to navigate using Inertia.js.
-        The page will update without a full page reload.
-      </p>
+          <Link
+            href="/todos"
+            className="block p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors"
+          >
+            Todo List
+          </Link>
+        </nav>
+      </div>
     </div>
   )
 }
