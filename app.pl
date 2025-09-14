@@ -4,6 +4,7 @@ use lib 'lib';
 
 plugin 'Inertia', {
     version => md5_sum( app->home->child('dist', '.vite', 'manifest.json')->slurp ),
+    layout  => app->home->child('dist', 'index.html')
 };
 
 # Serve only assets from dist directory

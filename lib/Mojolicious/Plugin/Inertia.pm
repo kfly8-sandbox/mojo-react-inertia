@@ -7,6 +7,9 @@ sub register ($self, $app, $conf) {
     my $version = $conf->{version}
                 or die "Inertia plugin requires a 'version' configuration option";
 
+    my $layout = $conf->{layout}
+                or die "Inertia plugin requires a 'layout' configuration option";
+
     $app->helper(inertia => sub ($c, $component, $props = {}) {
         my $is_inertia        = $c->req->headers->header('X-Inertia');
         my $partial_data      = $c->req->headers->header('X-Inertia-Partial-Data');
@@ -55,7 +58,7 @@ sub register ($self, $app, $conf) {
         $c->res->headers->header('Vary' => 'X-Inertia');
 
         return $c->render(
-            inline    => $app->home->child('dist', 'index.html')->slurp,
+            inline    => $layout,
             format    => 'html',
             data_page => encode_json($data_page)
         );
