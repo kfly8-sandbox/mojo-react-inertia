@@ -15,7 +15,15 @@ sub register ($self, $app, $conf) {
     # It must contain a <%= data_page %> placeholder at the application root.
     my $layout  = ref $conf->{layout} ? $conf->{layout}->slurp : $conf->{layout};
 
+    # History encryption settings (optional).
+    # Ref: https://inertiajs.com/history-encryption
+    my $default_encrypt_history = $conf->{encrypt_history} // 0;
+    my $default_clear_history   = $conf->{clear_history} // 0;
+
     $app->helper(inertia => sub ($c, $component, $props = {}, $options = {}) {
+        # Options
+        my $encrypt_history = $options->{encrypt_history} // $default_encrypt_history;
+        my $clear_history   = $options->{clear_history} // $default_clear_history,
 
         # If the client's asset version does not match the server's version,
         # then the client must do a full page reload.
@@ -49,12 +57,12 @@ sub register ($self, $app, $conf) {
         # Construct the page object.
         # Ref: https://inertiajs.com/the-protocol#the-page-object
         my $page_object = {
-            component => $component,
-            props     => $resolved_props,
-            url       => $c->req->url->to_string,
-            version   => $version,
-            # TODO: encryptHistory, clearHistory
-            # Ref: https://inertiajs.com/history-encryption
+            component      => $component,
+            props          => $resolved_props,
+            url            => $c->req->url->to_string,
+            version        => $version,
+            encryptHistory => $encrypt_history,
+            clearHistory   => $clear_history,
         };
 
         # Check if the request is an Inertia request.
